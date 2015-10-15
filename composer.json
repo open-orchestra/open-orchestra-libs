@@ -14,9 +14,6 @@
     "jms/metadata": "~1.1"
   },
   "require-dev": {
-    "doctrine/mongodb-odm": "1.0.2",
-    "doctrine/mongodb-odm-bundle" : "3.0.1",
-    "solution/mongo-odm-aggregation-bundle": "*",
     "psr/log": "1.0.0",
     "codeclimate/php-test-reporter": "dev-master",
     "phpunit/phpunit" : "4.7.2",
@@ -29,9 +26,6 @@
     "psr-4": {
       "OpenOrchestra\\Mapping\\": "Mapping/",
       "OpenOrchestra\\Pagination\\": "Pagination/",
-      "OpenOrchestra\\MongoTrait\\": "MongoTrait/",
-      "OpenOrchestra\\Repository\\": "Repository/",
-      "OpenOrchestra\\MongoBundle\\": "MongoBundle/"
     }
   }
 }
