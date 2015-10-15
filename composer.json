@@ -25,7 +25,7 @@
   "autoload": {
     "psr-4": {
       "OpenOrchestra\\Mapping\\": "Mapping/",
-      "OpenOrchestra\\Pagination\\": "Pagination/",
+      "OpenOrchestra\\Pagination\\": "Pagination/"
     }
   }
 }
