@@ -195,7 +195,10 @@ trait FilterTrait
      */
     protected function generateFilterSort(Stage $qa, $order = null , $descriptionEntity = null)
     {
-        $qa->sort($this->generateArrayForFilterSort($order, $descriptionEntity));
+        $sortArgs = $this->generateArrayForFilterSort($order, $descriptionEntity);
+        if (!empty($sortArgs)) {
+            $qa->sort($sortArgs);
+        }
 
         return $qa;
     }
