@@ -28,33 +28,25 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $targetDocument = 'fakeTargetDocument';
         $mapping = array();
-
         $documentManager = Phake::mock('Doctrine\ODM\MongoDB\DocumentManager');
         $searchMappingReader = Phake::mock('OpenOrchestra\Mapping\Reader\SearchMappingReader');
         $aggregationQueryBuilder = Phake::mock('Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder');
         $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
         $repository = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeRepository');
-
         $getId0 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
         $getId1 = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeGetIdInterface');
-        $metadataFactory = Phake::mock('\Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
         $metadata = Phake::mock('Doctrine\ODM\MongoDB\Mapping\ClassMetadata');
-
         $referencedDocuments = new ArrayCollection();
         $referencedDocuments->add($getId0);
         $referencedDocuments->add($getId1);
-
         Phake::when($metadata)->getFieldMapping(Phake::anyParameters())->thenReturn(array('targetDocument' => $targetDocument));
         Phake::when($searchMappingReader)->extractMapping($targetDocument)->thenReturn($mapping);
-        Phake::when($documentManager)->getMetadataFactory()->thenReturn($metadataFactory);
-        Phake::when($metadataFactory)->getMetadataFor($this->documentName)->thenReturn($metadata);
+        Phake::when($documentManager)->getClassMetadata($this->documentName)->thenReturn($metadata);
         Phake::when($documentManager)->getRepository($targetDocument)->thenReturn($repository);
         Phake::when($getId0)->getId()->thenReturn($this->id0);
         Phake::when($getId1)->getId()->thenReturn($this->id1);
         Phake::when($repository)->findForPaginate(Phake::anyParameters())->thenReturn($referencedDocuments);
-
         $this->strategy = new ReferenceFilterStrategy($documentManager, $searchMappingReader, $aggregationQueryBuilder, $filterTypeManager);
-
     }
 
     /**
