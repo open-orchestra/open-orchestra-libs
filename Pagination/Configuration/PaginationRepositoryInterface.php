@@ -8,6 +8,15 @@ namespace OpenOrchestra\Pagination\Configuration;
 interface PaginationRepositoryInterface extends FilterRepositoryInterface
 {
     /**
+     * Finds an object by its primary key / identifier.
+     *
+     * @param mixed $id The identifier.
+     *
+     * @return object The object.
+     */
+    public function find($id);
+
+    /**
      * @param PaginateFinderConfiguration $configuration
      *
      * @return array
