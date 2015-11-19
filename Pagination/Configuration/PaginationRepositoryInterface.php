@@ -34,5 +34,4 @@ interface PaginationRepositoryInterface extends FilterRepositoryInterface
      * @return mixed
      */
     public function countWithFilter(FinderConfiguration $configuration);
-
 }
