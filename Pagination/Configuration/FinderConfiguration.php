@@ -86,4 +86,13 @@ class FinderConfiguration
     {
         $this->search = $search;
     }
+
+    /**
+     * @param string $column
+     * @param mixed  $value
+     */
+    public function addColumnSearch($column, $value)
+    {
+        $this->search['columns'][$column] = $value;
+    }
 }

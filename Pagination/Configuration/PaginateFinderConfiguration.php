@@ -98,7 +98,8 @@ class PaginateFinderConfiguration extends FinderConfiguration
      *
      * @return int|null
      */
-    protected function getIntOrNull($value) {
-        return $value === NULL ? NULL : (int) $value;
+    protected function getIntOrNull($value)
+    {
+        return $value === null ? null : (int) $value;
     }
 }
