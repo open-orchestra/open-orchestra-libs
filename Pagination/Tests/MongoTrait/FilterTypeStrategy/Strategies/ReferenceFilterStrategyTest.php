@@ -12,10 +12,13 @@ use OpenOrchestra\Repository\AbstractAggregateRepository;
  */
 class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
 {
+    protected $documentManager;
     protected $value = 'fakeValue';
     protected $documentName = 'fakeDocumentName';
     protected $id0 = '000000000000000000000000';
     protected $id1 = 'aaaaaaaaaaaaaaaaaaaaaaaa';
+    protected $targetDocument = 'fakeTargetDocument';
+
     /**
      * @var ReferenceFilterStrategy
      */
@@ -26,9 +29,8 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $targetDocument = 'fakeTargetDocument';
         $mapping = array();
-        $documentManager = Phake::mock('Doctrine\ODM\MongoDB\DocumentManager');
+        $this->documentManager = Phake::mock('Doctrine\ODM\MongoDB\DocumentManager');
         $searchMappingReader = Phake::mock('OpenOrchestra\Mapping\Reader\SearchMappingReader');
         $aggregationQueryBuilder = Phake::mock('Solution\MongoAggregationBundle\AggregateQuery\AggregationQueryBuilder');
         $filterTypeManager = Phake::mock('OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\FilterTypeManager');
@@ -39,14 +41,14 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
         $referencedDocuments = new ArrayCollection();
         $referencedDocuments->add($getId0);
         $referencedDocuments->add($getId1);
-        Phake::when($metadata)->getFieldMapping(Phake::anyParameters())->thenReturn(array('targetDocument' => $targetDocument));
-        Phake::when($searchMappingReader)->extractMapping($targetDocument)->thenReturn($mapping);
-        Phake::when($documentManager)->getClassMetadata($this->documentName)->thenReturn($metadata);
-        Phake::when($documentManager)->getRepository($targetDocument)->thenReturn($repository);
+        Phake::when($metadata)->getFieldMapping(Phake::anyParameters())->thenReturn(array('targetDocument' => $this->targetDocument));
+        Phake::when($searchMappingReader)->extractMapping($this->targetDocument)->thenReturn($mapping);
+        Phake::when($this->documentManager)->getClassMetadata($this->documentName)->thenReturn($metadata);
+        Phake::when($this->documentManager)->getRepository($this->targetDocument)->thenReturn($repository);
         Phake::when($getId0)->getId()->thenReturn($this->id0);
         Phake::when($getId1)->getId()->thenReturn($this->id1);
         Phake::when($repository)->findForPaginate(Phake::anyParameters())->thenReturn($referencedDocuments);
-        $this->strategy = new ReferenceFilterStrategy($documentManager, $searchMappingReader, $aggregationQueryBuilder, $filterTypeManager);
+        $this->strategy = new ReferenceFilterStrategy($this->documentManager, $searchMappingReader, $aggregationQueryBuilder, $filterTypeManager);
     }
 
     /**
@@ -106,6 +108,18 @@ class ReferenceFilterStrategyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Repository without findForPaginate method
+     */
+    public function testGenerateFilterWithNoMethodFindForPaginate()
+    {
+        $columnsTree = 'groups.label';
+        $repository = Phake::mock('OpenOrchestra\Pagination\Tests\MongoTrait\FilterTypeStrategy\Strategies\PhakeRepositoryWithoutFindForPaginate');
+        Phake::when($this->documentManager)->getRepository($this->targetDocument)->thenReturn($repository);
+        $filter = $this->strategy->generateFilter($columnsTree, $this->value, $this->documentName);
+        $this->assertNull($filter);
+    }
+
+    /**
      * Test get name
      */
     public function testGetName()
@@ -131,4 +145,11 @@ interface PhakeGetIdInterface
 class PhakeRepository extends AbstractAggregateRepository
 {
     public function findForPaginate(){}
+}
+
+/**
+ * class PhakeRepositoryWithoutFindForPaginate
+ */
+class PhakeRepositoryWithoutFindForPaginate extends AbstractAggregateRepository
+{
 }

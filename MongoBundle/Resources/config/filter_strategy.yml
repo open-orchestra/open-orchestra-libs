@@ -5,6 +5,7 @@ parameters:
     open_orchestra_pagination.filter_type.boolean_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\BooleanFilterStrategy
     open_orchestra_pagination.filter_type.translated_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\TranslatedFilterStrategy
     open_orchestra_pagination.filter_type.reference_filter.class: OpenOrchestra\Pagination\MongoTrait\FilterTypeStrategy\Strategies\ReferenceFilterStrategy
+
 services:
     open_orchestra_pagination.filter_type.manager:
         class: %open_orchestra_pagination.filter_type.manager.class%

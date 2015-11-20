@@ -62,8 +62,12 @@ class ReferenceFilterStrategy implements FilterTypeInterface
             list($property, $referenceProperty) = $columnsTree;
 
             $metadata = $this->documentManager->getClassMetadata($documentName);
-            $targetDocument = $metadata->getFieldMapping($property)['targetDocument'];
+            $fieldMapping = $metadata->getFieldMapping($property);
+            if (!isset($fieldMapping['targetDocument'])) {
+                return null;
+            }
 
+            $targetDocument = $fieldMapping['targetDocument'];
             $mapping = $this->searchMappingReader->extractMapping($targetDocument);
 
             $repository = $this->documentManager->getRepository($targetDocument);
