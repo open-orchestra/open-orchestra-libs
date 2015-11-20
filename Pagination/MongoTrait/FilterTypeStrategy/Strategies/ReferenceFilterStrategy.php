@@ -24,14 +24,14 @@ class ReferenceFilterStrategy implements FilterTypeInterface
      * @param DocumentManager         $documentManager
      * @param SearchMappingReader     $searchMappingReader
      * @param AggregationQueryBuilder $aggregationQueryBuilder
-     * @param FilterTypeManager       $filterTypeManager)
+     * @param FilterTypeManager       $filterTypeManager
      */
     public function __construct(
         DocumentManager $documentManager,
         SearchMappingReader $searchMappingReader,
         AggregationQueryBuilder $aggregationQueryBuilder,
-        FilterTypeManager $filterTypeManager)
-    {
+        FilterTypeManager $filterTypeManager
+    ) {
         $this->documentManager = $documentManager;
         $this->searchMappingReader = $searchMappingReader;
         $this->aggregationQueryBuilder = $aggregationQueryBuilder;
