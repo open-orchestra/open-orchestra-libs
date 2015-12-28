@@ -18,6 +18,7 @@
     "doctrine/mongodb-odm": "1.0.2",
     "doctrine/mongodb-odm-bundle" : "3.0.1",
     "solution/mongo-odm-aggregation-bundle": "*",
+    "doctrine/cache": "1.5.*",
     "psr/log": "1.0.0",
     "codeclimate/php-test-reporter": "dev-master",
     "phpunit/phpunit" : "4.7.2",
