@@ -4,12 +4,13 @@ namespace OpenOrchestra\Tests\Pagination\Configuration;
 
 use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
+use OpenOrchestra\Pagination\Tests\AbstractBaseTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class DocumentTest
  */
-class FinderConfigurationTest extends \PHPUnit_Framework_TestCase
+class FinderConfigurationTest extends AbstractBaseTestCase
 {
     /**
      * @param array|null  $descriptionEntity

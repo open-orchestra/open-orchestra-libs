@@ -4,6 +4,7 @@ namespace OpenOrchestra\Mapping\Tests\Functional\Mapping\Reader;
 
 use OpenOrchestra\Mapping\Annotations as ORCHESTRA;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use ReflectionObject;
 
 /**
  * Class SearchMappingReaderTest
@@ -50,6 +51,20 @@ class SearchMappingReaderTest extends KernelTestCase
         $mapping = $this->readerSearch->extractMapping(get_class($this->fakeClass));
         $this->assertCount(3, $mapping);
         $this->assertSame($mapping, $mappingProperties);
+    }
+
+    /**
+     * Clean up
+     */
+    protected function tearDown()
+    {
+        $refl = new ReflectionObject($this);
+        foreach ($refl->getProperties() as $prop) {
+            if (!$prop->isStatic() && 0 !== strpos($prop->getDeclaringClass()->getName(), 'PHPUnit_')) {
+                $prop->setAccessible(true);
+                $prop->setValue($this, null);
+            }
+        }
     }
 }
 
