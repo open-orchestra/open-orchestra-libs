@@ -2,6 +2,8 @@
 
 namespace OpenOrchestra\Pagination\Tests;
 
+use ReflectionObject;
+
 /**
  * Class AbstractBaseTestCase
  */

@@ -4,6 +4,7 @@ namespace OpenOrchestra\Mapping\Tests\Functional\Mapping\Reader;
 
 use OpenOrchestra\Mapping\Annotations as ORCHESTRA;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use ReflectionObject;
 
 /**
  * Class SearchMappingReaderTest
