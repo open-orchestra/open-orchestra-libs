@@ -3,12 +3,13 @@
 namespace OpenOrchestra\Pagination\Tests\FilterType;
 
 use OpenOrchestra\Pagination\FilterType\FilterTypeManager;
+use OpenOrchestra\Pagination\Tests\AbstractBaseTestCase;
 use Phake;
 
 /**
- * Class Searching for Usages in Project Files...
+ * Class FilterTypeManagerTest
  */
-class FilterTypeManagerTest extends \PHPUnit_Framework_TestCase
+class FilterTypeManagerTest extends AbstractBaseTestCase
 {
     /**
      * @var FilterTypeManager
