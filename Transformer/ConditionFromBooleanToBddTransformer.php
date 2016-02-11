@@ -9,7 +9,7 @@ use Symfony\Component\Form\DataTransformerInterface;
  */
 abstract class ConditionFromBooleanToBddTransformer implements DataTransformerInterface
 {
-    protected $field = null;
+    protected $field = '';
 
     /**
      * @param string $field
