@@ -11,6 +11,7 @@
   "minimum-stability": "dev",
   "require": {
     "symfony/http-foundation": "*",
+    "symfony/form" : "*",
     "doctrine/annotations": "~1.0",
     "jms/metadata": "~1.1"
   },
@@ -26,7 +27,8 @@
   "autoload": {
     "psr-4": {
       "OpenOrchestra\\Mapping\\": "Mapping/",
-      "OpenOrchestra\\Pagination\\": "Pagination/"
+      "OpenOrchestra\\Pagination\\": "Pagination/",
+      "OpenOrchestra\\Transformer\\": "Transformer/"
     }
   }
 }
