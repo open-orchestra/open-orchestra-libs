@@ -17,4 +17,11 @@ abstract class ConditionFromBooleanToBddTransformer implements DataTransformerIn
     public function __construct($field) {
         $this->field = $field;
     }
+
+    /**
+     * @param string $field
+     */
+    public function setField($field) {
+        $this->field = $field;
+    }
 }
