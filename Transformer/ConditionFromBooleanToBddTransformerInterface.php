@@ -9,7 +9,6 @@ use Symfony\Component\Form\DataTransformerInterface;
  */
 interface ConditionFromBooleanToBddTransformerInterface extends DataTransformerInterface
 {
-
     /**
      * @param string $field
      */
