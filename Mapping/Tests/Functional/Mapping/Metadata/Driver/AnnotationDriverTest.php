@@ -4,7 +4,6 @@ namespace OpenOrchestra\Mapping\Tests\Functional\Mapping\Metadata\Driver;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use OpenOrchestra\Mapping\Metadata\Driver\AnnotationDriver;
-use OpenOrchestra\Mapping\Tests\Functional\Mapping\Metadata\Driver\FakeClass\FakeClassMetadata;
 
 /**
  * Class AnnotationDriverTest
