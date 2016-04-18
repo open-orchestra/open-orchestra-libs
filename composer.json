@@ -8,7 +8,6 @@
       "homepage": "https://github.com/open-orchestra/open-orchestra-libs/graphs/contributors"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
     "symfony/http-foundation": "*",
     "symfony/form" : "*",
@@ -20,6 +19,11 @@
     "codeclimate/php-test-reporter": "dev-master",
     "phpunit/phpunit" : "4.7.2",
     "phake/phake": "2.1.0"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.1.x-dev"
+    }
   },
   "config" : {
     "bin-dir" : "bin"
