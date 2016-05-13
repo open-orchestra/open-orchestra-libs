@@ -36,7 +36,6 @@
     "psr-4": {
       "OpenOrchestra\\Mapping\\": "Mapping/",
       "OpenOrchestra\\Pagination\\": "Pagination/",
-      "OpenOrchestra\\Transformer\\": "Transformer/"
     }
   }
 }
