@@ -32,7 +32,7 @@ class XmlDriver extends AbstractFileDriverSearch
                 $propertyMetadata = $this->propertySearchMetadataFactory->create($class->getName(), $field);
                 $propertyMetadata->key = $this->extractKey($key);
                 $propertyMetadata->type = ('' !== $type) ? $type : "string";
-                $propertyMetadata->field = $field;
+                $propertyMetadata->field = isset($property["fields"])? $property["fields"]: $field;
 
                 $classMetadata->addPropertyMetadata($propertyMetadata);
             }
