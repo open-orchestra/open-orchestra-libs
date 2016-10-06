@@ -24,9 +24,11 @@ interface PaginationRepositoryInterface extends FilterRepositoryInterface
     public function findForPaginate(PaginateFinderConfiguration $configuration);
 
     /**
+     * @param FinderConfiguration|null $configuration
+     *
      * @return int
      */
-    public function count();
+    public function count(FinderConfiguration $configuration = null);
 
     /**
      * @param FinderConfiguration $configuration

@@ -95,4 +95,13 @@ class FinderConfiguration
     {
         $this->search['columns'][$column] = $value;
     }
+
+    /**
+     * @param string $property
+     * @param mixed  $value
+     */
+    public function addPrefilterSearch($property, $value)
+    {
+        $this->search['prefilters'][$property] = $value;
+    }
 }
