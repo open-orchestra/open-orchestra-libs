@@ -16,4 +16,14 @@ class PropertySearchMetadataFactory implements PropertySearchMetadataFactoryInte
     public function create($class, $name){
         return new PropertySearchMetadata($class, $name);
     }
+
+    /**
+     * @param mixed  $class
+     * @param string $name
+     *
+     * @return PropertyCollectionSearchMetadata
+     */
+    public function createCollection($class, $name){
+        return new PropertyCollectionSearchMetadata($class, $name);
+    }
 }
