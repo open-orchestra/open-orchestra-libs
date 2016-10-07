@@ -4,8 +4,12 @@ namespace OpenOrchestra\Mapping\Metadata\Driver;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Metadata\Driver\DriverInterface;
+use OpenOrchestra\Mapping\Annotations\Search;
 use OpenOrchestra\Mapping\Metadata\MergeableClassMetadataFactoryInterface;
+use OpenOrchestra\Mapping\Metadata\PropertyCollectionSearchMetadata;
 use OpenOrchestra\Mapping\Metadata\PropertySearchMetadataFactoryInterface;
+use ReflectionProperty;
+use ReflectionClass;
 
 /**
  * Class AnnotationDriver
@@ -13,7 +17,7 @@ use OpenOrchestra\Mapping\Metadata\PropertySearchMetadataFactoryInterface;
 class AnnotationDriver implements DriverInterface
 {
     protected $reader;
-    protected $propertySearchMetadataClassFactory;
+    protected $propertySearchMetadataFactory;
     protected $mergeableClassMetadataFactory;
     protected $annotationClass;
 
@@ -37,16 +41,15 @@ class AnnotationDriver implements DriverInterface
     }
 
     /**
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
      *
      * @return \Metadata\ClassMetadata|null
      */
-    public function loadMetadataForClass(\ReflectionClass $class)
+    public function loadMetadataForClass(ReflectionClass $class)
     {
         $classMetadata = $this->mergeableClassMetadataFactory->create($class->getName());
         $existAnnotation = false;
         foreach ($class->getProperties() as $reflectionProperty) {
-            $propertyMetadata = $this->propertySearchMetadataFactory->create($class->getName(), $reflectionProperty->getName());
 
             $annotations = $this->reader->getPropertyAnnotations(
                 $reflectionProperty,
@@ -54,22 +57,47 @@ class AnnotationDriver implements DriverInterface
             );
 
             if (!empty($annotations)) {
-                $existAnnotation = true;
-                foreach ($annotations as $annotation) {
-                    if (get_class($annotation) == $this->annotationClass) {
-                        $propertyMetadata->key = $annotation->getKey();
-                        $propertyMetadata->type = $annotation->getType();
-                        if (null === $annotation->getField()) {
-                            $propertyMetadata->field = $reflectionProperty->getName();
-                        } else {
-                            $propertyMetadata->field = $annotation->getField();
-                        }
-                        $classMetadata->addPropertyMetadata($propertyMetadata);
-                    }
+                $metadata = $this->getPropertyMetadataSearch($annotations, $class, $reflectionProperty);
+                if (null !== $metadata) {
+                    $existAnnotation = true;
+                    $classMetadata->addPropertyMetadata($metadata);
                 }
             }
         }
 
         return (true === $existAnnotation) ? $classMetadata : null;
+    }
+
+    /**
+     * @param array              $annotations
+     * @param ReflectionClass    $class
+     * @param ReflectionProperty $reflectionProperty
+     *
+     * @return null|PropertyCollectionSearchMetadata
+     */
+    protected function getPropertyMetadataSearch(array $annotations, ReflectionClass $class, \ReflectionProperty $reflectionProperty) {
+
+        $listPropertyMetadata = array();
+        /** @var Search $annotation */
+        foreach ($annotations as $annotation) {
+            if (get_class($annotation) == $this->annotationClass) {
+                $propertyMetadata = $this->propertySearchMetadataFactory->create($class->getName(), $reflectionProperty->getName());
+                $propertyMetadata->key = $annotation->getKey();
+                $propertyMetadata->type = $annotation->getType();
+                $propertyMetadata->field = (null === $annotation->getField()) ? $reflectionProperty->getName() : $annotation->getField() ;
+
+                $listPropertyMetadata[] = $propertyMetadata;
+            }
+        }
+
+        if (empty($listPropertyMetadata)) {
+            return null;
+        }
+
+        $multipleSearchMetadata = $this->propertySearchMetadataFactory->createCollection($class->getName(), $reflectionProperty->getName());
+        $multipleSearchMetadata->propertySearchMetadata = $listPropertyMetadata;
+
+        return $multipleSearchMetadata;
+
     }
 }

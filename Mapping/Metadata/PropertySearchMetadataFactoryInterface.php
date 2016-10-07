@@ -14,4 +14,12 @@ interface PropertySearchMetadataFactoryInterface
      * @return PropertySearchMetadata
      */
     public function create($class, $name);
+
+    /**
+     * @param mixed  $class
+     * @param string $name
+     *
+     * @return PropertyCollectionSearchMetadata
+     */
+    public function createCollection($class, $name);
 }
