@@ -7,30 +7,33 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class PaginateFinderConfiguration
  */
-class PaginateFinderConfiguration extends FinderConfiguration
+class PaginateFinderConfiguration
 {
     protected $order = null;
     protected $skip = null;
     protected $limit = null;
+    protected $search = array();
 
     /**
      * @param null|array $order
      * @param null|int   $skip
      * @param null|int   $limit
+     * @param array      $mapping
      */
-    public function setPaginateConfiguration($order = null, $skip = null, $limit = null)
+    public function setPaginateConfiguration($order = null, $skip = null, $limit = null, array $mapping)
     {
         $this->setLimit($limit);
-        $this->setOrder($order);
+        $this->setOrder($order, $mapping);
         $this->setSkip($skip);
     }
 
     /**
      * @param Request $request
+     * @param array   $mapping
      *
      * @return PaginateFinderConfiguration
      */
-    public static function generateFromRequest(Request $request)
+    public static function generateFromRequest(Request $request, array $mapping = array())
     {
         $configuration = new static();
 
@@ -39,8 +42,35 @@ class PaginateFinderConfiguration extends FinderConfiguration
         $configuration->setPaginateConfiguration(
             $request->get('order'),
             $request->get('start'),
-            $request->get('length')
+            $request->get('length'),
+            $mapping
         );
+
+        return $configuration;
+    }
+
+    /**
+     * @param null|array $order
+     * @param null|int   $skip
+     * @param null|int   $limit
+     * @param array      $mapping
+     * @param null|array $search
+     *
+     * @return P
+     */
+    public static function generateFromVariable(
+        $order = null,
+        $skip = null,
+        $limit = null,
+        array $mapping = array(),
+        $search = null
+    ) {
+        $configuration = new static();
+
+        $configuration->setSearch($search);
+
+        $configuration->setPaginateConfiguration($order, $skip, $limit, $mapping);
+        $configuration->setSearch($search);
 
         return $configuration;
     }
@@ -55,10 +85,18 @@ class PaginateFinderConfiguration extends FinderConfiguration
 
     /**
      * @param null|array $order
+     * @param array      $mapping
      */
-    public function setOrder($order)
+    public function setOrder($order, $mapping)
     {
-        $this->order = $order;
+        $sort = array();
+        if (isset($order['name']) && isset($order['dir']) && isset($mapping[$order['name']])) {
+            $sort = array(
+                $mapping[$order['name']] => $order['dir'] == 'desc' ? -1 : 1
+            );
+        }
+
+        $this->order = $sort;
     }
 
     /**
@@ -101,5 +139,40 @@ class PaginateFinderConfiguration extends FinderConfiguration
     protected function getIntOrNull($value)
     {
         return $value === null ? null : (int) $value;
+    }
+
+    /**
+     * @return null|array
+     */
+    public function getSearch()
+    {
+        return $this->search;
+    }
+
+    /**
+     * @param string $index
+     *
+     * @return mixed search
+     */
+    public function getSearchIndex($index)
+    {
+        return isset($this->search[$index]) ? $this->search[$index] : null;
+    }
+
+    /**
+     * @param array $search
+     */
+    public function setSearch($search)
+    {
+        $this->search = $search;
+    }
+
+    /**
+     * @param string $column
+     * @param mixed  $value
+     */
+    public function addSearch($column, $value)
+    {
+        $this->search[$column] = $value;
     }
 }

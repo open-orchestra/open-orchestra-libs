@@ -2,18 +2,17 @@
 
 namespace OpenOrchestra\Tests\Pagination\Configuration;
 
-use OpenOrchestra\Pagination\Configuration\FinderConfiguration;
 use OpenOrchestra\Pagination\Configuration\PaginateFinderConfiguration;
 use OpenOrchestra\Pagination\Tests\AbstractBaseTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Class DocumentTest
+ * Class PaginateFinderConfigurationTest
  */
-class FinderConfigurationTest extends AbstractBaseTestCase
+class PaginateFinderConfigurationTest extends AbstractBaseTestCase
 {
     /**
-     * @param array|null  $descriptionEntity
+     * @param array       $mapping
      * @param array|null  $search
      * @param array|null  $order
      * @param int|null    $limit
@@ -21,21 +20,15 @@ class FinderConfigurationTest extends AbstractBaseTestCase
      *
      * @dataProvider provideConfigurationCreation
      */
-    public function testGenerateFromRequest($descriptionEntity, $search, $order, $limit, $skip)
+    public function testGenerateFromRequest($mapping, $search, $order, $limit, $skip)
     {
         $request = $this->createRequest($search, $order, $limit, $skip);
-        $configuration = FinderConfiguration::generateFromRequest($request);
-        $configuration->setDescriptionEntity($descriptionEntity);
-        $this->finderConfigurationTest($configuration, $search, $descriptionEntity);
-
-        $paginateConfiguration = PaginateFinderConfiguration::generateFromRequest($request);
-        $paginateConfiguration->setDescriptionEntity($descriptionEntity);
-        $this->finderConfigurationTest($paginateConfiguration, $search, $descriptionEntity);
-        $this->finderPaginateConfigurationTest($paginateConfiguration, $order, $limit, $skip);
+        $paginateConfiguration = PaginateFinderConfiguration::generateFromRequest($request, $mapping);
+        $this->finderPaginateConfigurationTest($paginateConfiguration, $order, $limit, $skip, $search);
     }
 
     /**
-     * @param array|null  $descriptionEntity
+     * @param array       $mapping
      * @param array|null  $search
      * @param array|null  $order
      * @param int|null    $limit
@@ -43,13 +36,10 @@ class FinderConfigurationTest extends AbstractBaseTestCase
      *
      * @dataProvider provideConfigurationCreation
      */
-    public function testPaginateVarGeneration($descriptionEntity, $search, $order, $limit, $skip)
+    public function testPaginateVarGeneration(array $mapping, $search, $order, $limit, $skip)
     {
-        $configuration = PaginateFinderConfiguration::generateFromVariable($descriptionEntity, $search);
-        $this->finderConfigurationTest($configuration, $search, $descriptionEntity);
-
-        $configuration->setPaginateConfiguration($order, $skip, $limit);
-        $this->finderPaginateConfigurationTest($configuration, $order, $limit, $skip);
+        $configuration = PaginateFinderConfiguration::generateFromVariable($order, $skip, $limit, $mapping, $search);
+        $this->finderPaginateConfigurationTest($configuration, $order, $limit, $skip, $search);
     }
 
     /**
@@ -59,31 +49,21 @@ class FinderConfigurationTest extends AbstractBaseTestCase
     {
         return array(
             array(array(),array(), array(), 0, 1),
-            array(null,array('global' =>'fakeSearch'), null, null, null, null),
-            array(array(),array('columns' => array()), null, -1, 0),
+            array(array(),array('global' =>'fakeSearch'), array(), null, null),
+            array(array(),array('columns' => array()), array(), -1, 0),
         );
     }
-
-    /**
-     * @param FinderConfiguration $configuration
-     * @param array|null          $search
-     * @param array|null          $descriptionEntity
-     */
-    protected function finderConfigurationTest(FinderConfiguration $configuration, $search, $descriptionEntity)
-    {
-        $this->isTypeOrNull("is_array", $configuration->getSearch(), $search);
-        $this->isTypeOrNull("is_array", $configuration->getDescriptionEntity(), $descriptionEntity);
-    }
-
 
     /**
      * @param PaginateFinderConfiguration $configuration
      * @param array|null                  $order
      * @param int|null                    $limit
      * @param int|null                    $skip
+     * @param array|null                  $search
      */
-    protected function finderPaginateConfigurationTest(PaginateFinderConfiguration $configuration, $order, $limit, $skip)
+    protected function finderPaginateConfigurationTest(PaginateFinderConfiguration $configuration, $order, $limit, $skip, $search)
     {
+        $this->isTypeOrNull("is_array", $configuration->getSearch(), $search);
         $this->isTypeOrNull("is_array", $configuration->getOrder(), $order);
         $this->isTypeOrNull("is_int", $configuration->getLimit(), $limit);
         $this->isTypeOrNull("is_int", $configuration->getSkip(), $skip);
