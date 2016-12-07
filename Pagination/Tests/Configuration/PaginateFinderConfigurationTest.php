@@ -49,7 +49,7 @@ class PaginateFinderConfigurationTest extends AbstractBaseTestCase
     {
         return array(
             array(array(),array(), array(), 0, 1),
-            array(array(),array('global' =>'fakeSearch'), array(), null, null),
+            array(array(),array('global' =>'fakeSearch'), array(), 10, 0),
             array(array(),array('columns' => array()), array(), -1, 0),
         );
     }

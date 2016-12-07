@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
 class PaginateFinderConfiguration
 {
     protected $order = null;
-    protected $skip = null;
-    protected $limit = null;
+    protected $skip = 0;
+    protected $limit = 10;
     protected $search = array();
 
     /**
@@ -22,9 +22,13 @@ class PaginateFinderConfiguration
      */
     public function setPaginateConfiguration($order = null, $skip = null, $limit = null, array $mapping)
     {
-        $this->setLimit($limit);
+        if (null !== $limit) {
+            $this->setLimit($limit);
+        }
         $this->setOrder($order, $mapping);
-        $this->setSkip($skip);
+        if (null !== $skip) {
+            $this->setSkip($skip);
+        }
     }
 
     /**
@@ -56,7 +60,7 @@ class PaginateFinderConfiguration
      * @param array      $mapping
      * @param null|array $search
      *
-     * @return P
+     * @return PaginateFinderConfiguration
      */
     public static function generateFromVariable(
         $order = null,
