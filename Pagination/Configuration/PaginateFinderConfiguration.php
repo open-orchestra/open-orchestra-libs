@@ -19,16 +19,21 @@ class PaginateFinderConfiguration
      * @param null|int   $skip
      * @param null|int   $limit
      * @param array      $mapping
+     * @apram null|array search
      */
-    public function setPaginateConfiguration($order = null, $skip = null, $limit = null, array $mapping)
+    public function setPaginateConfiguration($order = null, $skip = null, $limit = null, array $mapping, $search = null)
     {
         if (null !== $limit) {
             $this->setLimit($limit);
         }
+
         $this->setOrder($order, $mapping);
+
         if (null !== $skip) {
             $this->setSkip($skip);
         }
+
+        $this->setSearch($search);
     }
 
     /**
@@ -41,13 +46,12 @@ class PaginateFinderConfiguration
     {
         $configuration = new static();
 
-        $configuration->setSearch($request->get('search'));
-
         $configuration->setPaginateConfiguration(
             $request->get('order'),
             $request->get('start'),
             $request->get('length'),
-            $mapping
+            $mapping,
+            $request->get('search')
         );
 
         return $configuration;
@@ -71,10 +75,7 @@ class PaginateFinderConfiguration
     ) {
         $configuration = new static();
 
-        $configuration->setSearch($search);
-
-        $configuration->setPaginateConfiguration($order, $skip, $limit, $mapping);
-        $configuration->setSearch($search);
+        $configuration->setPaginateConfiguration($order, $skip, $limit, $mapping, $search);
 
         return $configuration;
     }
