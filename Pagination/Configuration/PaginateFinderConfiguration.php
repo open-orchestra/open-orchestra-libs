@@ -173,11 +173,11 @@ class PaginateFinderConfiguration
     }
 
     /**
-     * @param string $column
+     * @param string $field
      * @param mixed  $value
      */
-    public function addSearch($column, $value)
+    public function addSearch($field, $value)
     {
-        $this->search[$column] = $value;
+        $this->search[$field] = $value;
     }
 }
