@@ -22,17 +22,18 @@ class FilterTypeManager
      * @param string $value
      * @param string $type
      * @param string $documentName
+     * @param string $format
      *
      * @return null|array
      */
-    public function generateFilter($type, $name, $value, $documentName)
+    public function generateFilter($type, $name, $value, $documentName='', $format='')
     {
         /**
          * @var FilterTypeInterface $filterType
          */
         foreach ($this->filters as $filterType){
             if ($filterType->support($type)) {
-                return $filterType->generateFilter($name, $value, $documentName);
+                return $filterType->generateFilter($name, $value, $documentName, $format);
             }
         }
 
